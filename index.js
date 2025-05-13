@@ -9,8 +9,11 @@ const Order = require('./models/User')
 const Login =require('./models/User')
 const Data = require('./models/Card')
 const { connectDb } = require('./dbcon')
+const { default: mongoose } = require('mongoose')
 
 connectDb();
+
+console.log("connected to db");
 
 const app = express()
 const port = process.env.PORT || 5000
@@ -106,4 +109,7 @@ app.post('/api/login', async (req, res)=>{
   }
 })
 
-app.listen(port, () => console.log(`Server running on port ${port}`));
+mongoose.connection.once('open', () => {
+  console.log('Connected to MongoDB');
+  app.listen(port, () => console.log(`Server running on port ${port}`));
+})
