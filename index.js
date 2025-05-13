@@ -23,7 +23,7 @@ app.use(cors({
 }))
 app.use(bodyParser.json())
 
-mongoose.connect('mongodb+srv://suhailka744:iu5Y0TI23BEpLQSF@text-pro-db.orzgsof.mongodb.net/?retryWrites=true&w=majority&appName=text-pro-db', {
+mongoose.connect('mongodb+srv://suhailka744:iu5Y0TI23BEpLQSF@text-pro-db.orzgsof.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
