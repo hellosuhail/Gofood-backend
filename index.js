@@ -109,6 +109,7 @@ app.post('/api/login', async (req, res)=>{
   }
 
   catch(err){
+    console.log(err);
    res.status(500).send('someting went worng')
   }
 })
