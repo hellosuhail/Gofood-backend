@@ -110,7 +110,7 @@ app.post('/api/login', async (req, res)=>{
 
   catch(err){
     console.log(err);
-   res.status(500).send('someting went worng')
+   res.status(500).json({message: 'someting went wrong', error: err})
   }
 })
 
