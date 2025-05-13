@@ -85,9 +85,8 @@ app.post('/api/payment', async (req, res) => {
 //login route
 
 app.post('/api/login', async (req, res)=>{
-  const {email, password  } = req.body
-
   try{
+    const {email, password  } = req.body;
     let user = await Login.findOne({email})
 
     if(!user){
@@ -99,13 +98,13 @@ app.post('/api/login', async (req, res)=>{
       const isMatch= await bcrypt.compare(password, user.password)
 
       if(!isMatch){
-        res.status(400).json({message:'invalide password'})
+        return res.status(400).json({message:'invalide password'})
       }
     }
 
-    const token= jwt.sign({userId: user._id}, process.env.JWT_SECRET ,{expiresIn:'1h'})
+    const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:'1h'})
 
-    res.json({ token, message: user.isNew ? 'User created' : 'Login successful' });
+    res.json({ token, message: user?.isNew ? 'User created' : 'Login successful' });
   }
 
   catch(err){
