@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const Razorpay = require('razorpay')
@@ -7,29 +8,19 @@ const bodyParser = require('body-parser')
 const Order = require('./models/User')
 const Login =require('./models/User')
 const Data = require('./models/Card')
-const mongoose = require('mongoose')
+const { connectDb } = require('./dbcon')
 
-
-
-require('dotenv').config()
+connectDb();
 
 const app = express()
 const port = process.env.PORT || 5000
 
+app.use(bodyParser.json())
 app.use(cors({
   credentials: true,
   origin: '*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }))
-app.use(bodyParser.json())
-
-mongoose.connect('mongodb+srv://suhailka744:iu5Y0TI23BEpLQSF@text-pro-db.orzgsof.mongodb.net/?retryWrites=true&w=majority', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-
-
 
 const razorpay = new Razorpay({
   key_id: process.env.KEY_ID,
@@ -89,6 +80,8 @@ app.post('/api/login', async (req, res)=>{
     const {email, password  } = req.body;
     let user = await Login.findOne({email})
 
+    console.log("user", user);
+
     if(!user){
          const hashPassword =await bcrypt.hash(password, 10)
          user = new Login({email, password:hashPassword})
@@ -103,7 +96,7 @@ app.post('/api/login', async (req, res)=>{
     }
 
     const token = jwt.sign({userId: user._id}, process.env.JWT_SECRET, {expiresIn:'1h'})
-
+    console.log("token", user);
     res.json({ token, message: user?.isNew ? 'User created' : 'Login successful' });
   }
 
@@ -112,7 +105,5 @@ app.post('/api/login', async (req, res)=>{
    res.status(500).json({message: 'someting went wrong', error: err})
   }
 })
-
-
 
 app.listen(port, () => console.log(`Server running on port ${port}`));
